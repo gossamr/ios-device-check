@@ -91,6 +91,7 @@ async function UpdateDevice(host, jwt, payload) {
         if (response.status !== 200) {
             throw new Error(`Device check api returned ${response.status}: ${await response.clone().text()}`);
         }
+        return response;
     }
     catch (err) {
         if (request) {
@@ -121,6 +122,7 @@ async function ValidateDevice(host, jwt, payload) {
         if (response.status !== 200) {
             throw new Error(`Device check api returned ${response.status}: ${await response.clone().text()}`);
         }
+        return response;
     }
     catch (err) {
         if (request) {

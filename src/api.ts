@@ -1,5 +1,5 @@
 // (c) PepperHQ Limited - All Right Reserved
-import fetch, { Request } from 'node-fetch';
+import fetch, { Request, Response } from 'node-fetch';
 import uuid from 'uuid';
 import { ApiError } from './error';
 
@@ -80,7 +80,7 @@ export interface UpdateDevicePayload extends QueryDevicePayload {
     bit1: boolean;
 }
 
-export async function UpdateDevice(host: string, jwt: string, payload: UpdateDevicePayload): Promise<void> {
+export async function UpdateDevice(host: string, jwt: string, payload: UpdateDevicePayload): Promise<Response> {
     let request;
     let response;
     try {
@@ -105,7 +105,7 @@ export async function UpdateDevice(host: string, jwt: string, payload: UpdateDev
         if (response.status !== 200) {
             throw new Error(`Device check api returned ${response.status}: ${await response.clone().text()}`);
         }
-
+        return response
     } catch (err) {
         if (request) {
             throw new ApiError(request, response, err)
@@ -118,7 +118,7 @@ export type ValidateDevicePayload = QueryDevicePayload;
 
 // The documentation is cryptic about what is returned if the token is invalid so we assume any error === invalid 
 // and throw an error if one is returned instead of returning a boolean.
-export async function ValidateDevice(host: string, jwt: string, payload: ValidateDevicePayload): Promise<void> {
+export async function ValidateDevice(host: string, jwt: string, payload: ValidateDevicePayload): Promise<Response> {
     let request;
     let response;
     try {
@@ -141,6 +141,7 @@ export async function ValidateDevice(host: string, jwt: string, payload: Validat
         if (response.status !== 200) {
             throw new Error(`Device check api returned ${response.status}: ${await response.clone().text()}`);
         }
+        return response
     } catch (err) {
         if (request) {
             throw new ApiError(request, response, err)
